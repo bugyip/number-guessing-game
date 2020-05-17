@@ -1,7 +1,6 @@
 package com.bugyip.game.model.response;
 
 import com.bugyip.game.model.request.PlayRoundRequestModel;
-import com.bugyip.game.model.request.StartGameRequestModel;
 
 /**
  * Request model for playing a new round

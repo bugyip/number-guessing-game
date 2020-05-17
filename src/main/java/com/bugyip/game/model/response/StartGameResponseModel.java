@@ -24,23 +24,11 @@ public class StartGameResponseModel {
         return gameId;
     }
 
-    public void setGameId(Long gameId) {
-        this.gameId = gameId;
-    }
-
     public Integer getRangeFrom() {
         return rangeFrom;
     }
 
-    public void setRangeFrom(Integer rangeFrom) {
-        this.rangeFrom = rangeFrom;
-    }
-
     public Integer getRangeTo() {
         return rangeTo;
-    }
-
-    public void setRangeTo(Integer rangeTo) {
-        this.rangeTo = rangeTo;
     }
 }

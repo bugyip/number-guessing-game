@@ -18,7 +18,6 @@ public class RequestModelTest {
 
     @BeforeEach
     void setUp() {
-
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
@@ -50,7 +49,7 @@ public class RequestModelTest {
      */
     @Test
     public void testplayNewRound_GameIdIsNull_ConstraintViolationException(){
-        PlayRoundRequestModel playRoundRequestModel = new PlayRoundRequestModel(1L, null);
+        PlayRoundRequestModel playRoundRequestModel = new PlayRoundRequestModel(null, 1);
 
         Set<ConstraintViolation<PlayRoundRequestModel>> violations = validator.validate(playRoundRequestModel);
         assertEquals(violations.size(), 1);

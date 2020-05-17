@@ -1,5 +1,6 @@
 package com.bugyip.game.controller;
 
+import com.bugyip.game.enums.DifficultyType;
 import com.bugyip.game.enums.GameStatus;
 import com.bugyip.game.enums.RoundStatus;
 import com.bugyip.game.model.request.PlayRoundRequestModel;
@@ -46,11 +47,11 @@ public class GuessingGameControllerTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        final String GAME_TYPE_EASY = "easy";
-        startGameRequestModel = new StartGameRequestModel(5, GAME_TYPE_EASY);
+        startGameRequestModel = new StartGameRequestModel(5, DifficultyType.EASY.toString());
         playRoundRequestModel = new PlayRoundRequestModel(1L, 7);
+
         startGameResponseDto = new StartGameResponseDto(1L, 1, 20);
-        playRoundResponseDto = new PlayRoundResponseDto(2L, 3, RoundStatus.HIGH, GameStatus.RUNNING);
+        playRoundResponseDto = new PlayRoundResponseDto(2L, 4, RoundStatus.HIGH, GameStatus.RUNNING);
     }
 
     @Test

@@ -6,9 +6,9 @@ import com.bugyip.game.entity.RoundEntity;
 import com.bugyip.game.enums.DifficultyType;
 import com.bugyip.game.enums.GameStatus;
 import com.bugyip.game.enums.RoundStatus;
+import com.bugyip.game.exception.GameWasFinishedException;
 import com.bugyip.game.exception.NumberOutOfRangeException;
 import com.bugyip.game.exception.NotFoundException;
-import com.bugyip.game.exception.GameWasEndedException;
 import com.bugyip.game.model.request.StartGameRequestModel;
 import com.bugyip.game.model.request.PlayRoundRequestModel;
 import com.bugyip.game.repository.GameEntityRepository;
@@ -53,7 +53,7 @@ public class NumberGuessingGameServiceImpl implements NumberGuessingGameService 
                 gameTypeEntityRepository.findByDifficultyType(DifficultyType.valueOf(startGameRequestModel.getDifficulty()));
 
         if (gameTypeEntity == null) {
-            throw new NotFoundException(String.format("The selected game type (game type = %s) not found!",
+            throw new NotFoundException(String.format("The selected difficulty (%s) not found!",
                     startGameRequestModel.getDifficulty() != null ? DifficultyType.valueOf(startGameRequestModel.getDifficulty()) : null));
         }
 
@@ -81,7 +81,7 @@ public class NumberGuessingGameServiceImpl implements NumberGuessingGameService 
         if (gameTypeEntity == null) {
             throw  new NotFoundException(String.format("The selected game (game id = %s) not found!", guessingRequestModel.getGameId()));
         } else if (!GameStatus.RUNNING.equals(gameEntity.getGameStatus())) {
-            throw new GameWasEndedException(String.format("The game has already ended! (game id = %s)", gameEntity.getId()));
+            throw new GameWasFinishedException(String.format("The game has already finished! (game id = %s)", gameEntity.getId()));
         } else if (guessingRequestModel.getTrialNumber() < gameTypeEntity.getRangeFrom() || guessingRequestModel.getTrialNumber() > gameTypeEntity.getRangeTo()) {
             throw new NumberOutOfRangeException(String.format("The trial number is out of the range (%s - %s)", gameTypeEntity.getRangeFrom(), gameTypeEntity.getRangeTo()));
         }

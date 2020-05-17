@@ -6,7 +6,7 @@ import com.bugyip.game.entity.RoundEntity;
 import com.bugyip.game.enums.DifficultyType;
 import com.bugyip.game.enums.GameStatus;
 import com.bugyip.game.enums.RoundStatus;
-import com.bugyip.game.exception.GameWasEndedException;
+import com.bugyip.game.exception.GameWasFinishedException;
 import com.bugyip.game.exception.NotFoundException;
 import com.bugyip.game.exception.NumberOutOfRangeException;
 import com.bugyip.game.model.request.PlayRoundRequestModel;
@@ -90,7 +90,7 @@ public class NumberGuessingGameServiceImplTest {
 
 
     /**
-     * Round -> game not found -> NotFoundException should be thrown
+     * Start a new round -> game not found -> NotFoundException should be thrown.
      */
     @Test
     public void testplayNewRound_NotExistingGameId_NotFoundException() {
@@ -108,7 +108,7 @@ public class NumberGuessingGameServiceImplTest {
      * Round 2 (trial > higher bound of the range)
      */
     @Test
-    public void testplayNewRound_EndedGameId_NumberOutOfRangeException() {
+    public void testplayNewRound_FinishedGameId_NumberOutOfRangeException() {
         GameTypeEntity gameTypeEntity = getStartedGameEntity().getGameTypeEntity();
 
         when(gameEntityRepository.findById(anyLong())).thenReturn(Optional.of(getStartedGameEntity()));
@@ -121,13 +121,13 @@ public class NumberGuessingGameServiceImplTest {
     }
 
     /**
-     * Ended game -> one more round -> GameWasEndedException should be thrown
+     * Finished game -> one more round -> GameWasFinishedException should be thrown
      */
     @Test
-    public void testplayNewRound_TrialNumberOutOfRange_GameWasEndedException() {
-        when(gameEntityRepository.findById(anyLong())).thenReturn(Optional.of(getEndedGameEntity()));
+    public void testplayNewRound_TrialNumberOutOfRange_GameWasFinishedException() {
+        when(gameEntityRepository.findById(anyLong())).thenReturn(Optional.of(getFinishedGameEntity()));
 
-        assertThrows(GameWasEndedException.class,
+        assertThrows(GameWasFinishedException.class,
                 () -> {
                     numberGuessingGameService.playNewRound(playRoundRequestModel);
                 });
@@ -150,7 +150,7 @@ public class NumberGuessingGameServiceImplTest {
         playRoundResponseDto = numberGuessingGameService.playNewRound(playRoundRequestModel);
         assertEquals(playRoundResponseDto.getRemainingRounds(), 0);
         assertEquals(playRoundResponseDto.getGameStatus(), GameStatus.LOST);
-        assertTrue(RoundStatus.HIGH.equals(playRoundResponseDto.getRoundStatus()) || RoundStatus.LOW.equals(playRoundResponseDto.getRoundStatus()));
+        assertEquals(playRoundResponseDto.getRoundStatus(), RoundStatus.LOW);
     }
 
     /**
@@ -237,18 +237,18 @@ public class NumberGuessingGameServiceImplTest {
         when(roundEntityRepository.save(any())).thenReturn(roundEntity);
     }
 
-    private GameEntity getEndedGameEntity() {
-        GameEntity endedRoundGameEntity = new GameEntity();
-        endedRoundGameEntity.setId(1L);
-        endedRoundGameEntity.setHiddenNumber(5);
-        endedRoundGameEntity.setMaxNumberOfRounds(3);
-        endedRoundGameEntity.setGameStatus(GameStatus.WON);
-        endedRoundGameEntity.setGameTypeEntity(defaultGameType);
-        endedRoundGameEntity.addRoundEntity(new RoundEntity(new Date(), 1));
-        endedRoundGameEntity.addRoundEntity(new RoundEntity(new Date(), 2));
-        endedRoundGameEntity.addRoundEntity(new RoundEntity(new Date(), 3));
+    private GameEntity getFinishedGameEntity() {
+        GameEntity finishedRoundGameEntity = new GameEntity();
+        finishedRoundGameEntity.setId(1L);
+        finishedRoundGameEntity.setHiddenNumber(5);
+        finishedRoundGameEntity.setMaxNumberOfRounds(3);
+        finishedRoundGameEntity.setGameStatus(GameStatus.WON);
+        finishedRoundGameEntity.setGameTypeEntity(defaultGameType);
+        finishedRoundGameEntity.addRoundEntity(new RoundEntity(new Date(), 1));
+        finishedRoundGameEntity.addRoundEntity(new RoundEntity(new Date(), 2));
+        finishedRoundGameEntity.addRoundEntity(new RoundEntity(new Date(), 3));
 
-        return endedRoundGameEntity;
+        return finishedRoundGameEntity;
     }
 
     private GameEntity getLastRoundGameEntity() {

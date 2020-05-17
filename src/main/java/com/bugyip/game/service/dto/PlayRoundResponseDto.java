@@ -24,31 +24,15 @@ public class PlayRoundResponseDto {
         return roundId;
     }
 
-    public void setRoundId(Long roundId) {
-        this.roundId = roundId;
-    }
-
     public Integer getRemainingRounds() {
         return remainingRounds;
-    }
-
-    public void setRemainingRounds(Integer remainingRounds) {
-        this.remainingRounds = remainingRounds;
     }
 
     public RoundStatus getRoundStatus() {
         return roundStatus;
     }
 
-    public void setRoundStatus(RoundStatus roundStatus) {
-        this.roundStatus = roundStatus;
-    }
-
     public GameStatus getGameStatus() {
         return gameStatus;
-    }
-
-    public void setGameStatus(GameStatus gameStatus) {
-        this.gameStatus = gameStatus;
     }
 }

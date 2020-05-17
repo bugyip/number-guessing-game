@@ -1,8 +1,8 @@
 package com.bugyip.game.exception.handler;
 
+import com.bugyip.game.exception.GameWasFinishedException;
 import com.bugyip.game.exception.NumberOutOfRangeException;
 import com.bugyip.game.exception.NotFoundException;
-import com.bugyip.game.exception.GameWasEndedException;
 import com.bugyip.game.exception.response.ExceptionResponse;
 import com.bugyip.game.exception.response.MethodArgumentNotValidExceptionResponse;
 import org.springframework.http.HttpHeaders;
@@ -38,12 +38,12 @@ public class GuessingGameExceptionHandler extends ResponseEntityExceptionHandler
 
     /**
      *
-     * @param ex - GameWasEndedException, NumberOutOfRangeException
+     * @param ex - GameWasFinishedException, NumberOutOfRangeException
      * @param request
      * @return - ResponseEntity - HTTP 400
      */
-    @ExceptionHandler({GameWasEndedException.class, NumberOutOfRangeException.class})
-    public final ResponseEntity<Object> handleGameWasEndedException(Exception ex, WebRequest request) {
+    @ExceptionHandler({GameWasFinishedException.class, NumberOutOfRangeException.class})
+    public final ResponseEntity<Object> handleGameWasFinishedException(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
