@@ -48,9 +48,17 @@ public class NumberGuessingGameServiceImpl implements NumberGuessingGameService 
     @Transactional
     public StartGameResponseDto startNewGame(StartGameRequestModel startGameRequestModel) {
 
-        GameTypeEntity gameTypeEntity = startGameRequestModel.getDifficulty() == null ?
-                gameTypeEntityRepository.findByDifficultyType(DifficultyType.DEFAULT) :
-                gameTypeEntityRepository.findByDifficultyType(DifficultyType.valueOf(startGameRequestModel.getDifficulty()));
+        GameTypeEntity gameTypeEntity;
+
+        if (startGameRequestModel.getDifficulty() == null) {
+            gameTypeEntity = gameTypeEntityRepository.findByDifficultyType(DifficultyType.DEFAULT);
+        } else {
+            try {
+                gameTypeEntity = gameTypeEntityRepository.findByDifficultyType(DifficultyType.valueOf(startGameRequestModel.getDifficulty().toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                throw new NotFoundException(String.format("There is no difficulty with the given name. (%s)", startGameRequestModel.getDifficulty()));
+            }
+        }
 
         if (gameTypeEntity == null) {
             throw new NotFoundException(String.format("The selected difficulty (%s) not found!",
